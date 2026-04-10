@@ -219,7 +219,3 @@ ford-ai/
 This system includes special handling for safety-critical automotive warnings. The LLM is instructed to always recommend stopping the vehicle and seeking professional help for oil pressure loss, overheating, brake failure, and flashing check engine lights. The system explicitly avoids generating speculative mechanical advice that could lead to accidents.
 
 ---
-
-## Author
-
-Built for Sorim.AI — AI Engineer (Fresher) Technical Assessment
