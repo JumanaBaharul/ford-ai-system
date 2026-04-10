@@ -99,30 +99,28 @@ GET /recommend?q=I+want+a+pickup+truck+for+towing
 
 ## Architecture
 
-```
-User Query
-    │
-    ▼
-┌─────────────────────────────────────────────┐
-│             FastAPI Application             │
-│                                             │
-│   ┌────────────┐   ┌────────┐   ┌──────────┐│
-│   │  /search   │   │  /ask  │   │/recommend││
-│   └────┬───────┘   └───┬────┘   └────┬─────┘│
-│        │               │              │      │
-│   ┌────▼───────────────▼────┐   ┌────▼──────┐│
-│   │     FAISS Vector DB     │   │Recommender││
-│   │    (cosine similarity)  │   │ (tag match)│
-│   └───────────┬─────────────┘   └────────────┘
-│               │ top-k documents              │
-│        ┌──────▼───────────────┐              │
-│        │     Groq LLM (free)  │              │
-│        │    llama-3.1-8b      │              │
-│        └──────────────────────┘              │
-└─────────────────────────────────────────────┘
-    │
-    ▼
-Grounded Answer
+```mermaid
+flowchart TD
+
+    A[User Query] --> B[FastAPI Application]
+
+    subgraph FastAPI Application
+        B1[/search/]
+        B2[/ask/]
+        B3[/recommend/]
+    end
+
+    B --> B1
+    B --> B2
+    B --> B3
+
+    B1 --> C[FAISS Vector DB\n(cosine similarity)]
+    B2 --> C
+    B3 --> D[Recommender\n(tag match)]
+
+    C -->|top-k documents| E[Groq LLM\nllama-3.1-8b]
+
+    E --> F[Grounded Answer]
 ```
 
 ---
