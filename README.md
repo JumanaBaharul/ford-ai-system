@@ -100,32 +100,35 @@ GET /recommend?q=I+want+a+pickup+truck+for+towing
 ## Architecture
 
 ```
-````markdown
-```mermaid
-flowchart TD
-
-    A[User Query] --> B
-
-    subgraph API["FastAPI Application"]
-        B[/API Router/]
-        B --> S["/search"]
-        B --> Q["/ask"]
-        B --> R["/recommend"]
-    end
-
-    S --> V["FAISS Vector DB"]
-    Q --> V
-    R --> REC["Recommender"]
-
-    V -->|top-k docs| LLM["Groq LLM (llama-3.1-8b)"]
-    LLM --> OUT[Grounded Answer]
+User Query
+    │
+    ▼
+┌──────────────────────────────────────────────────────────┐
+│                 FastAPI Application                      │
+│                                                          │
+│   ┌────────────┐    ┌────────────┐    ┌──────────────┐    │
+│   │   /search  │    │    /ask    │    │  /recommend  │    │
+│   └─────┬──────┘    └─────┬──────┘    └──────┬───────┘    │
+│         │                 │                 │             │
+│         │                 │         ┌───────▼────────┐    │
+│         │                 │         │  Recommender   │    │
+│         │                 │         │   (tag match)  │    │
+│         │                 │         └────────────────┘    │
+│         │                 │                               │
+│   ┌─────▼─────────────────▼──────────────────────────┐    │
+│   │               FAISS Vector DB                    │    │
+│   │            (cosine similarity)                   │    │
+│   └───────────────┬──────────────────────────────────┘    │
+│                   │  top-k documents                      │
+│           ┌───────▼───────────────────────┐               │
+│           │        Groq LLM (free)        │               │
+│           │        llama-3.1-8b           │               │
+│           └───────────────────────────────┘               │
+└──────────────────────────────────────────────────────────┘
+    │
+    ▼
+Grounded Answer
 ````
-
-```
-```
-
-```
-
 ---
 
 ## Design Decisions
