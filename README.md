@@ -99,26 +99,27 @@ GET /recommend?q=I+want+a+pickup+truck+for+towing
 
 ## Architecture
 
-```mermaid
+```
+mermaid
 flowchart TD
 
     A[User Query] --> B[FastAPI Application]
 
-    subgraph FastAPI Application
-        B1[/search/]
-        B2[/ask/]
-        B3[/recommend/]
+    subgraph FastAPI_Application
+        B1["/search"]
+        B2["/ask"]
+        B3["/recommend"]
     end
 
     B --> B1
     B --> B2
     B --> B3
 
-    B1 --> C[FAISS Vector DB\n(cosine similarity)]
+    B1 --> C["FAISS Vector DB (cosine similarity)"]
     B2 --> C
-    B3 --> D[Recommender\n(tag match)]
+    B3 --> D["Recommender (tag match)"]
 
-    C -->|top-k documents| E[Groq LLM\nllama-3.1-8b]
+    C -->|top-k documents| E["Groq LLM llama-3.1-8b"]
 
     E --> F[Grounded Answer]
 ```
