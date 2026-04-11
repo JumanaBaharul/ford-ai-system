@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ### 2. Set API Key
 
 ```bash
-export ANTHROPIC_API_KEY="your-key-here"
+GROK_KEY="your-key-here"
 ```
 
 ### 3. Run
